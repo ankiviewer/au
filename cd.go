@@ -2,9 +2,18 @@ package main
 
 import (
   "regexp"
+  "os"
+  "errors"
 )
 
-var CdArgs = map[string]string{
+var CdCmd = Cmd{
+  "Changes directory inside project",
+  []Arg{},
+  false,
+  cd,
+}
+
+var cdMap = map[string]string{
   "root": "",
   "..": "",
   "web": "apps/anki_web",
@@ -14,11 +23,13 @@ var CdArgs = map[string]string{
   "nodeapp": "/apps/anki/nodeapp",
 }
 
-func CdDir(currentFilePath string, arg string) string {
-    root := regexp.MustCompile(`.*anki_viewer_umbrella`).FindString(currentFilePath)
-
-    desiredDir := root + CdArgs[arg]
-
-    return desiredDir
+func cd(fp string, arg string) ([]string, error) {
+    root := regexp.MustCompile(`.*anki_viewer_umbrella`).FindString(fp)
+    if dest, ok := cdMap[arg]; ok {
+        os.Chdir(root + dest)
+        return []string{}, nil
+    } else {
+        return nil, errors.New("arg not found")
+    }
 }
 

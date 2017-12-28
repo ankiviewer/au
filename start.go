@@ -3,7 +3,6 @@ package main
 var StartCmd = Cmd{
     "Start Cmd",
     []Arg{},
-    true,
     start,
 }
 

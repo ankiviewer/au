@@ -14,7 +14,6 @@ type Arg struct {
 type Cmd struct {
     desc string
     args []Arg
-    log bool
     f func(string, string) ([]string, error)
 }
 
@@ -31,10 +30,14 @@ var AuCmds = map[string]Cmd{
     "deploy": DeployCmd,
 }
 
-func handleLog(ss []string, _ error) {
-  for _, s := range ss {
-    fmt.Println(s, "")
-  }
+func handleLog(ss []string, err error) {
+    if err != nil {
+        panic(err)
+    } else {
+        for _, s := range ss {
+            fmt.Println(s)
+        }
+    }
 }
 
 func main() {
@@ -44,14 +47,10 @@ func main() {
 
     if c, ok := AuCmds[command]; ok {
         switch {
-        case len(arguments) == 0 && c.log:
+        case len(arguments) == 0:
             handleLog(c.f(fp, ""))
-        case len(arguments) == 0 && !c.log:
-            c.f(fp, "")
-        case len(arguments) == 1 && c.log:
+        case len(arguments) == 1:
             handleLog(c.f(fp, arguments[1]))
-        case len(arguments) == 1 && !c.log:
-            c.f(fp, arguments[1])
         default:
             // Consider allowing more than 1 argument in the future
             panic("Too many arguments")

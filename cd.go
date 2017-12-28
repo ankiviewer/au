@@ -9,7 +9,6 @@ import (
 var CdCmd = Cmd{
   "Changes directory inside project",
   []Arg{},
-  false,
   cd,
 }
 

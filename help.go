@@ -3,7 +3,6 @@ package main
 var HelpCmd = Cmd{
     "Help Cmd",
     []Arg{},
-    true,
     help,
 }
 

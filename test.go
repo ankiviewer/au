@@ -3,7 +3,6 @@ package main
 var TestCmd = Cmd{
     "Test Cmd",
     []Arg{},
-    true,
     test,
 }
 

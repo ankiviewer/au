@@ -3,7 +3,6 @@ package main
 var BuildCmd = Cmd{
     "Build Cmd",
     []Arg{},
-    true,
     build,
 }
 

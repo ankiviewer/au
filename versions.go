@@ -9,7 +9,6 @@ import (
 var VersionsCmd = Cmd{
     "prints the versions of all the project technologies",
     []Arg{},
-    true,
     versions,
 }
 

@@ -3,7 +3,6 @@ package main
 var DeployCmd = Cmd{
     "Deploy Cmd",
     []Arg{},
-    true,
     deploy,
 }
 

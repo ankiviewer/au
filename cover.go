@@ -3,7 +3,6 @@ package main
 var CoverCmd = Cmd{
     "Cover Cmd",
     []Arg{},
-    true,
     cover,
 }
 

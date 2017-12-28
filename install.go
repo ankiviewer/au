@@ -3,7 +3,6 @@ package main
 var InstallCmd = Cmd{
     "Install Cmd",
     []Arg{},
-    true,
     install,
 }
 

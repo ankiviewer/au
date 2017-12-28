@@ -3,7 +3,6 @@ package main
 var OpenCmd = Cmd{
     "Open Cmd",
     []Arg{},
-    true,
     open,
 }
 

@@ -4,7 +4,6 @@ import (
     "os"
     "path/filepath"
     "fmt"
-    "strings"
 )
 
 type Arg struct {
@@ -32,8 +31,10 @@ var AuCmds = map[string]Cmd{
     "deploy": DeployCmd,
 }
 
-func handleLog(s []string, _ error) {
-  fmt.Println(strings.Join(s, ""))
+func handleLog(ss []string, _ error) {
+  for _, s := range ss {
+    fmt.Println(s, "")
+  }
 }
 
 func main() {

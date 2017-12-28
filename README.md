@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/shouston3/au.svg?branch=master)](https://travis-ci.org/shouston3/au)
+[![codecov](https://codecov.io/gh/shouston3/au/branch/master/graph/badge.svg)](https://codecov.io/gh/shouston3/au)
+
 # AU
 
 au is a companion program for the `anki_viewer_umbrella` project

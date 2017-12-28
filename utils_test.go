@@ -88,4 +88,46 @@ func TestMapKeys3(t *testing.T) {
   }
 }
 
+func TestInAnkiRoot(t *testing.T) {
+    testCases := []struct {
+        fp string
+        res bool
+    }{
+        {"~/dir1/dir2/anki_viewer_umbrella/dir", false},
+        {"~/dir1/dir2/anki_viewer_umbrella", true},
+        {"~/dir1/dir2/", false},
+    }
+    for _, tc := range testCases {
+        actual := InAnkiRoot(tc.fp)
+        expected := tc.res
+        if actual != expected {
+            t.Error(
+                "For:", tc.fp,
+                "expected:", expected,
+                "instead got:", actual,
+            )
+        }
+    }
+}
 
+func TestInAnkiApp(t *testing.T) {
+    testCases := []struct {
+        fp string
+        res bool
+    }{
+        {"~/dir1/dir2/anki_viewer_umbrella/dir", true},
+        {"~/dir1/dir2/anki_viewer_umbrella", true},
+        {"~/dir1/dir2/", false},
+    }
+    for _, tc := range testCases {
+        actual := InAnkiApp(tc.fp)
+        expected := tc.res
+        if actual != expected {
+            t.Error(
+                "For:", tc.fp,
+                "expected:", expected,
+                "instead got:", actual,
+            )
+        }
+    }
+}

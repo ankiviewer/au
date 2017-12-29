@@ -4,7 +4,7 @@ import (
     "os"
     "path/filepath"
     "fmt"
-    "au/messages"
+    "github.com/shouston3/au/messages"
 )
 
 type Arg struct {

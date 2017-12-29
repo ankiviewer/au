@@ -1,11 +1,11 @@
 [![Build Status](https://travis-ci.org/shouston3/au.svg?branch=master)](https://travis-ci.org/shouston3/au)
 [![codecov](https://codecov.io/gh/shouston3/au/branch/master/graph/badge.svg)](https://codecov.io/gh/shouston3/au)
 
-# AU
+# AV
 
-au is a companion program for the `anki_viewer_umbrella` project
+av is a companion program for the `av_umbrella` project
 
-See project here: [shouston3/anki_viewer_umbrella](https://github.com/shouston3/anki_viewer_umbrella)
+See project here: [ankiviewer/av_umbrella](https://github.com/ankiviewer/av_umbrella)
 
 # Quickstart
 

@@ -43,7 +43,7 @@ func handleLog(ss []string, err error) {
 
 func main() {
     if len(os.Args) == 1 {
-        fmt.Println(messages.InputRequired)
+        fmt.Println(messages.NoInput)
         return
     }
 

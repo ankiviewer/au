@@ -1,10 +1,7 @@
 package messages
 
+// TODO: generate this from Cmds
 var Usage = `
-       __ _ _   _
-      / _  | | | |
-     | (_| | |_| |
-      \__,_|\__,_|
 au shortcuts for the anki_viewer_umbrella project
 Usage:
   au root                       cd into umbrella project root
@@ -43,9 +40,37 @@ Examples:
   # tests
   $ au test apps/anki/test/anki_test.ex -w`
 
-var InputRequired = `Input required!
-For usage, see:
-$ au help`
+  // TODO: add these for alias output
+// find "$(find $HOME -type d | grep Anki2 | head -1)" -type f | grep collection.anki2 for anki sqlite db path
+// pwd for proj path
+var NoInput = `
+       __ _ _   _
+      / _  | | | |
+     | (_| | |_| |
+      \__,_|\__,_|
+
+# Quick Start:
+
+git clone https://github.com/shouston3/anki_viewer_umbrella.git && cd anki_viewer_umbrella
+
+# ensure you have the correct exectuables in your $PATH
+au versions
+
+# install the dependencies and run the build
+au install
+
+# set up the database, aliases and other required setups
+# place the following lines in your .rc file for constant use
+
+export AU_ANKI_SQLITE_PATH=%s
+export AU_PROJ_PATH=%s
+au setup
+# start the app
+au start
+
+# For more information on au usage
+au help
+`
 
 var NotInApp = `Need to be inside anki_viewer app to run au`
 

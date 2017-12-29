@@ -12,6 +12,7 @@ var VersionsCmd = Cmd{
     versions,
 }
 
+// TODO: ensure versions are met
 type executable struct {
     name string
     versionFlag string

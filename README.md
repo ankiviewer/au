@@ -27,4 +27,4 @@ go build
 
 Place this `au` executable somewhere in your `$PATH`
 
-For useage run: `au` or `au --help` after installation
+For useage run: `au` or `au help` after installation

@@ -4,6 +4,7 @@ import (
     "os"
     "path/filepath"
     "fmt"
+    "au/messages"
 )
 
 type Arg struct {
@@ -32,7 +33,7 @@ var AuCmds = map[string]Cmd{
 
 func handleLog(ss []string, err error) {
     if err != nil {
-        panic(err)
+        fmt.Println(err)
     } else {
         for _, s := range ss {
             fmt.Println(s)
@@ -41,21 +42,36 @@ func handleLog(ss []string, err error) {
 }
 
 func main() {
+    if len(os.Args) == 1 {
+        fmt.Println(messages.InputRequired)
+        return
+    }
+
     fp, _ := filepath.Abs("./")
-    arguments := os.Args[1:]
-    command := arguments[0]
+    command := os.Args[1]
+    arguments := os.Args[2:]
+
+    if !InAnkiApp(fp) {
+        fmt.Println(messages.NotInApp)
+        return
+    }
+
+    if (command != "cd" || command != "help") && !InAnkiRoot(fp) {
+        fmt.Println(messages.NotInRoot)
+        return
+    }
 
     if c, ok := AuCmds[command]; ok {
         switch {
         case len(arguments) == 0:
             handleLog(c.f(fp, ""))
         case len(arguments) == 1:
-            handleLog(c.f(fp, arguments[1]))
+            handleLog(c.f(fp, arguments[0]))
         default:
             // Consider allowing more than 1 argument in the future
             panic("Too many arguments")
         }
     } else {
-        panic("Command not found")
+        fmt.Println("Command not found")
     }
 }

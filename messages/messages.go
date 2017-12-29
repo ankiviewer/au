@@ -42,3 +42,11 @@ Examples:
   $ au build -js -w
   # tests
   $ au test apps/anki/test/anki_test.ex -w`
+
+var InputRequired = `Input required!
+For usage, see:
+$ au help`
+
+var NotInApp = `Need to be inside anki_viewer app to run au`
+
+var NotInRoot = `Need to be in project root to run this command`

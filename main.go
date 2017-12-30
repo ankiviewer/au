@@ -4,7 +4,7 @@ import (
     "os"
     "path/filepath"
     "fmt"
-    "github.com/shouston3/au/messages"
+    "github.com/shouston3/av/messages"
 )
 
 type Arg struct {
@@ -18,7 +18,7 @@ type Cmd struct {
     f func(string, string) ([]string, error)
 }
 
-var AuCmds = map[string]Cmd{
+var AvCmds = map[string]Cmd{
     "help": HelpCmd,
     "cd": CdCmd,
     "open": OpenCmd,

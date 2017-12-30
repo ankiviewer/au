@@ -1,19 +1,11 @@
 package messages
 
-// TODO: generate this from Cmds
 var Usage = `
 av shortcuts for the av_umbrella project
 
 Usage:
-  av setup
-  av install                    runs the necessary installations
-  av build                      builds files
-  av test                       runs the phoenix tests
-  av cover                      runs the test coverage
-  av start                      starts the server
-  av versions                   prints the versions of project technologies
-  av deploy                     deploys the app
 
+%s
 Examples:
   # builds our js static assets
   # and watches for changes
@@ -32,20 +24,28 @@ var NoInput = `
 
 # Quick Start:
 
-git clone https://github.com/ankiviewer/av_umbrella.git && cd av_umbrella
+You will need to set up this file structure:
+
+├── ankiviewer
+    ├── av_umbrella (github.com/ankiviewer/av_umbrella)
+    ├── nodeapp (github.com/ankiviewer/nodeapp)
+    └── assets (github.com/ankiviewer/assets)
+
+This can be set up simply with:
+
+av setup filestructure 
 
 # ensure you have the correct technologies installed
 av versions
 
-# install the dependencies and run the build
+# set up the database, export the correct environment variables and setup aliases
+av setup
+
+# install the dependencies
 av install
 
-# set up the database, aliases and other required setups
-# place the following lines in your .rc file for constant use
-
-export AV_ANKI_SQLITE_PATH=%s
-export AV_PROJ_PATH=%s
-av setup
+# run the build
+av build
 
 # start the app
 av start
@@ -53,6 +53,12 @@ av start
 # For more information on av usage
 av help
 `
+// # set up the database, aliases and other required setups
+// # place the following lines in your .rc file for constant use
+// 
+// export AV_ANKI_SQLITE_PATH=%s
+// export AV_PROJ_PATH=%s
+// av setup
 
 var NotInApp = `Need to be inside ankiviewer app to run av`
 

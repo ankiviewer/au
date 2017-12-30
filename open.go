@@ -2,7 +2,7 @@ package main
 
 var OpenCmd = Cmd{
     "Open Cmd",
-    []Arg{},
+    []Arg{Arg{"travis", "opens travis"}},
     open,
 }
 

@@ -4,7 +4,7 @@ import (
     "os"
     "path/filepath"
     "fmt"
-    "github.com/shouston3/av/messages"
+    "github.com/ankiviewer/av/messages"
 )
 
 type Arg struct {
@@ -19,8 +19,7 @@ type Cmd struct {
 }
 
 var AvCmds = map[string]Cmd{
-    "help": HelpCmd,
-    "cd": CdCmd,
+    "setup": SetupCmd,
     "open": OpenCmd,
     "install": InstallCmd,
     "build": BuildCmd,
@@ -51,17 +50,12 @@ func main() {
     command := os.Args[1]
     arguments := os.Args[2:]
 
-    if !InAnkiApp(fp) {
-        fmt.Println(messages.NotInApp)
-        return
+    if command == "help" {
+      handleLog(Help(fp, ""))
+      return
     }
 
-    if (command != "cd" || command != "help") && !InAnkiRoot(fp) {
-        fmt.Println(messages.NotInRoot)
-        return
-    }
-
-    if c, ok := AuCmds[command]; ok {
+    if c, ok := AvCmds[command]; ok {
         switch {
         case len(arguments) == 0:
             handleLog(c.f(fp, ""))

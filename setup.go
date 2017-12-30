@@ -5,10 +5,10 @@ import (
     "errors"
 )
 
-var CdCmd = Cmd{
+var SetupCmd = Cmd{
     "sets up aliases for changing directory in the project",
     []Arg{},
-    cd,
+    setup,
 }
 
 var aliases = []struct {
@@ -22,7 +22,7 @@ var aliases = []struct {
     {"aunodeapp", "/apps/anki/nodeapp"},
 }
 
-func cd(fp string, arg string) ([]string, error) {
+func setup(fp string, arg string) ([]string, error) {
     root := regexp.MustCompile(`.*anki_viewer_umbrella`).FindString(fp)
     aliasAcc := ""
     if arg == "output" {
@@ -43,7 +43,7 @@ aunodeapp
 
 Run the following command in your terminal:
 
-eval $(au cd)
+eval $(au setup)
 `}, nil
     } else {
         return nil, errors.New("arg not found")

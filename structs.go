@@ -15,9 +15,10 @@ type Opts struct {
     fp string
     args []string
     aliases map[string]string
-    envs map[string]string
     root string
     dirsInRoot []string
+    sqlitePath string
+    ankiviewerPath string
 }
 
 type Command struct {

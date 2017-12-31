@@ -13,9 +13,6 @@ Examples:
   # tests
   $ av test apps/anki/test/anki_test.ex -w`
 
-  // TODO: add these for alias output
-// find "$(find $HOME -type d | grep Anki2 | head -1)" -type f | grep collection.anki2 for anki sqlite db path
-// pwd for proj path
 var FileStructure = `
 ├── ankiviewer
     ├── av_umbrella (github.com/ankiviewer/av_umbrella)
@@ -38,7 +35,7 @@ av setup filestructure
 # ensure you have the correct technologies installed
 av versions
 
-# set up the database, export the correct environment variables and setup aliases
+# set up the file structure, environment variables and aliases
 av setup
 
 # install the dependencies
@@ -53,12 +50,6 @@ av start
 # For more information on av usage
 av help
 `
-// # set up the database, aliases and other required setups
-// # place the following lines in your .rc file for constant use
-// 
-// export AV_ANKI_SQLITE_PATH=%s
-// export AV_PROJ_PATH=%s
-// av setup
 
 var NotInApp = `Need to be inside ankiviewer app to run av`
 

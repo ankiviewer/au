@@ -1,11 +1,9 @@
 package main
 
 import (
-    // "regexp"
     "errors"
-    // "os/exec"
-    // "io/ioutil"
-    // "strings"
+    "fmt"
+    "github.com/ankiviewer/av/messages"
 )
 
 var args = []AvArg{
@@ -21,7 +19,6 @@ var args = []AvArg{
       "envs",
       "sets up the required environment variables",
     },
-    // Arg{"remotes", "sets up the heroku remotes"},
 }
 
 var SetupCmd = AvCmd{
@@ -100,15 +97,45 @@ func filestructure(o Opts) ([]Command, error) {
                 )
             }
         }
-        out = append(out, Command{"All up to date!", ""})
+        out = append(out, Command{"Configured File Structure\n" + messages.FileStructure, ""})
         return out, nil
     }
 }
 
 func aliases(o Opts) ([]Command, error) {
-    return []Command{Command{"Hello setup aliases", ""}}, nil
+    out := []Command{Command{"Append these to your .rc file:", ""}}
+    root := o.root
+    if o.ankiviewerPath != "" {
+        root = "$AV_ANKIVIEWER_PATH"
+    }
+    for _, a := range Aliases {
+        log := a.alias + "='cd " + root + a.dest + "'"
+        out = append(out, Command{log, ""})
+    }
+    return out, nil
 }
 
 func envs(o Opts) ([]Command, error) {
-    return []Command{Command{"Hello setup envs", ""}}, nil
+    if o.sqlitePath == "" {
+        return nil, errors.New(`
+            sqlitePath not found, will have to be manually set
+        `)
+    }
+    str := `
+    Append these to your .rc file:
+    AV_ANKI_SQLITE_PATH=%s
+    AV_ANKIVIEWER_PATH=%s
+    `
+    out := []Command{
+        Command{
+            fmt.Sprintf(
+                str,
+                o.sqlitePath,
+                o.root,
+            ),
+            "",
+       },
+    }
+
+    return out, nil
 }

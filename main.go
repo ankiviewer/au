@@ -1,3 +1,5 @@
+//+build !test
+
 package main
 
 import (
@@ -42,12 +44,13 @@ func getAliases() map[string]string{
     return aliases
 }
 
-func getEnvs() map[string]string{
-    envs := make(map[string]string)
-    for _, e := range []string{"AV_ANKI_SQLITE_PATH", "AV_ANKIVIEWER_PATH"} {
-        envs[e] = os.Getenv(e)
+func getSqlitePath() string {
+    c := "find \"$(find $HOME -type d | grep Anki2 | head -1)\" -type f | grep collection\\.anki2$"
+    out, err := exec.Command("sh", "-c", c).Output()
+    if err != nil {
+        return ""
     }
-    return envs
+    return strings.Trim(string(out), "\n ")
 }
 
 func main() {
@@ -68,9 +71,13 @@ func main() {
     command := os.Args[1]
     arguments := os.Args[2:]
     aliases := getAliases()
-    envs := getEnvs()
+    sqlitePath := os.Getenv("AV_ANKI_SQLITE_PATH")
+    ankiviewerPath := os.Getenv("AV_ANKIVIEWER_PATH")
+    if sqlitePath == "" {
+        sqlitePath = getSqlitePath()
+    }
 
-    o := Opts{fp, arguments, aliases, envs, root, dirsInRoot}
+    o := Opts{fp, arguments, aliases, root, dirsInRoot, sqlitePath, ankiviewerPath}
 
     if command == "help" {
         handleCmd(Help(o))

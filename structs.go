@@ -30,7 +30,6 @@ var AvCmds = map[string]AvCmd{
     // can't include "help" command as it references this slice
     "setup": SetupCmd,
     // "open": OpenCmd,
-    // "install": InstallCmd,
     // "build": BuildCmd,
     // "test": TestCmd,
     // "cover": CoverCmd,

@@ -4,11 +4,12 @@ import (
     "os/exec"
     "regexp"
     "errors"
+    "strings"
 )
 
-var VersionsCmd = Cmd{
+var VersionsCmd = AvCmd{
     "prints the versions of all the project technologies",
-    []Arg{},
+    []AvArg{},
     versions,
 }
 
@@ -35,7 +36,7 @@ var executables = []executable{
     executable{"elixir", longV, elixir_v_regex},
 }
 
-func versions(_ string, _ string) ([]string, error) {
+func versions(o Opts) ([]Command, error) {
     outs := make([]string, 0, len(executables))
     var err error
 
@@ -55,8 +56,8 @@ func versions(_ string, _ string) ([]string, error) {
     }
 
     if err != nil {
-        return []string{}, err
+        return []Command{}, err
     } else {
-        return outs, nil
+        return []Command{Command{strings.Join(outs, "\n"), ""}}, nil
     }
 }

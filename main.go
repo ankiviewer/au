@@ -2,42 +2,52 @@ package main
 
 import (
     "os"
+    "os/exec"
     "path/filepath"
     "fmt"
+    "regexp"
+    "strings"
     "github.com/ankiviewer/av/messages"
 )
 
-type Arg struct {
-    name string
-    desc string
-}
-
-type Cmd struct {
-    desc string
-    args []Arg
-    f func(string, string) ([]string, error)
-}
-
-var AvCmds = map[string]Cmd{
-    "setup": SetupCmd,
-    "open": OpenCmd,
-    "install": InstallCmd,
-    "build": BuildCmd,
-    "test": TestCmd,
-    "cover": CoverCmd,
-    "start": StartCmd,
-    "versions": VersionsCmd,
-    "deploy": DeployCmd,
-}
-
-func handleLog(ss []string, err error) {
+func handleCmd(cmds []Command, err error) {
     if err != nil {
         fmt.Println(err)
     } else {
-        for _, s := range ss {
-            fmt.Println(s)
+        for _, c := range cmds {
+            if c.cmd != "" {
+                _, cerr := exec.Command("sh", "-c", c.cmd).Output()
+                if cerr != nil {
+                    fmt.Printf("CMD ERR: %s", cerr)
+                    break
+                }
+            }
+            if c.log != "" {
+                fmt.Println(c.log)
+            }
         }
     }
+}
+
+func getAliases() map[string]string{
+    aliases := make(map[string]string)
+    for _, a := range []string{"avweb", "avmain", "avassets", "avnodeapp"} {
+        aout, aerr := exec.Command("alias", a).Output()
+        if aerr != nil {
+            aliases[a] = ""
+        } else {
+            aliases[a] = string(aout)
+        }
+    }
+    return aliases
+}
+
+func getEnvs() map[string]string{
+    envs := make(map[string]string)
+    for _, e := range []string{"AV_ANKI_SQLITE_PATH", "AV_ANKIVIEWER_PATH"} {
+        envs[e] = os.Getenv(e)
+    }
+    return envs
 }
 
 func main() {
@@ -47,24 +57,25 @@ func main() {
     }
 
     fp, _ := filepath.Abs("./")
+    root := regexp.MustCompile(`.*ankiviewer`).FindString(fp)
+    dirsInRoot := []string{}
+    if root != "" {
+        lsInRoot, _ := exec.Command("ls", root).Output()
+        for _, dir := range strings.Split(string(lsInRoot), "\n") {
+            dirsInRoot = append(dirsInRoot, dir)
+        }
+    }
     command := os.Args[1]
     arguments := os.Args[2:]
+    aliases := getAliases()
+    envs := getEnvs()
+
+    o := Opts{fp, arguments, aliases, envs, root, dirsInRoot}
 
     if command == "help" {
-      handleLog(Help(fp, ""))
-      return
-    }
-
-    if c, ok := AvCmds[command]; ok {
-        switch {
-        case len(arguments) == 0:
-            handleLog(c.f(fp, ""))
-        case len(arguments) == 1:
-            handleLog(c.f(fp, arguments[0]))
-        default:
-            // Consider allowing more than 1 argument in the future
-            panic("Too many arguments")
-        }
+        handleCmd(Help(o))
+    } else if c, ok := AvCmds[command]; ok {
+        handleCmd(c.f(o))
     } else {
         fmt.Println("Command not found")
     }

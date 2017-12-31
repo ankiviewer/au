@@ -1,97 +1,114 @@
 package main
 
 import (
-    "regexp"
+    // "regexp"
     "errors"
-    "os/exec"
-    "io/ioutil"
-    "strings"
+    // "os/exec"
+    // "io/ioutil"
+    // "strings"
 )
 
-var args = []Arg{
-    Arg{"filestructure", "sets up a great filestructure for the project"},
-    Arg{"aliases", "sets up great aliases for changing directory around the project" },
-    Arg{"envs", "sets up the required environment variables"},
+var args = []AvArg{
+    AvArg{
+      "filestructure",
+      "sets up a great filestructure for the project",
+    },
+    AvArg{
+      "aliases",
+      "sets up great aliases for changing directory around the project",
+    },
+    AvArg{
+      "envs",
+      "sets up the required environment variables",
+    },
     // Arg{"remotes", "sets up the heroku remotes"},
 }
 
-var SetupCmd = Cmd{
+var SetupCmd = AvCmd{
     "sets up aliases for changing directory in the project",
     args,
     setup,
 }
 
-var aliases = []struct {
-    alias string
-    dest string
-}{
-    {"avweb", "/av_umbrella/apps/av_web"},
-    {"avmain", "/av_umbrella/apps/av"},
-    {"avassets", "/assets"},
-    {"avnodeapp", "/nodeapp"},
-}
-
 var projects = []string{
     "av_umbrella",
     "assets",
-    "nodeapp"
+    "nodeapp",
 }
 
-func setup(fp string, arg string) ([]string, error) {
-    out := ""
-    root := regexp.MustCompile(`.*ankiviewer`).FindString(fp)
-
-    switch arg {
+func setup(o Opts) ([]Command, error) {
+    a := ""
+    if len(o.args) != 0 {
+        a = o.args[0]
+    }
+    switch a {
     case "":
-        for _, a := range args {
-            out += "av setup " + a.name + strings.Repeat(" ", 20 - len(a.name)) + a.desc
-        }
-    case "filestructure":
-        filestructure()
-    case "aliases":
-    case "envs":
-    }
+        out := []Command{Command{"Usage:", ""}}
 
-    if root == "" {
-        exec.Command("mkdir", "ankiviewer")
-        root = fp + "/ankiviewer"
-    }
-    for _, project := range projects {
-        files, _ := ioutil.ReadDir(root)
-        if !StringInSlice(project, files) {
-            exec.Command(
-                "git",
-                "clone",
-                "https://github.com/ankiviewer/" + project + ".git",
-                root + "/" + project
+        for _, a := range args {
+            out = append(
+                out,
+                Command{
+                    "av setup " + a.name + Spaces(20 - len(a.name)) + a.desc,
+                    "",
+                },
             )
         }
-    }
-
-    out += "Configured:" + FileStructure
-
-    aliasAcc := ""
-    for _, a := range aliases {
-        x := "alias " + a.alias + "=" + root + a.dest + ";"
-        aliasAcc = aliasAcc + x
-    }
-
-        return []string{aliasAcc}, nil
-    } else if arg == "" {
-        return []string{`To set up the useful aliases:
-
-auroot
-auweb
-auassets
-aumain
-aunodeapp
-
-Run the following command in your terminal:
-
-eval $(au setup)
-`}, nil
-    } else {
-        return , errors.New("arg not found")
+        return out, nil
+    case "filestructure":
+        return filestructure(o)
+    case "aliases":
+        return aliases(o)
+    case "envs":
+        return envs(o)
+    default:
+      return []Command{}, errors.New("Command not found: av setup " + a)
     }
 }
 
+func filestructure(o Opts) ([]Command, error) {
+    switch {
+    case o.root == "":
+        out := []Command{}
+        out = append(
+            out,
+            Command{
+                "making directory ankiviewer",
+                "mkdir " + o.fp + "/ankiviewer",
+            },
+        )
+        for _, project := range projects {
+            out = append(
+                out,
+                Command{
+                    "cloning " + project,
+                    "git clone https://github.com/ankiviewer/" + project + ".git " + o.root + "/" + project,
+                },
+            )
+        }
+        return out, nil
+    default:
+        out := []Command{}
+        for _, project := range projects {
+            if !StringInSlice(project, o.dirsInRoot) {
+                out = append(
+                    out,
+                    Command{
+                        "cloning " + project,
+                        "git clone https://github.com/ankiviewer/" + project + ".git " + o.root + "/" + project,
+                    },
+                )
+            }
+        }
+        out = append(out, Command{"All up to date!", ""})
+        return out, nil
+    }
+}
+
+func aliases(o Opts) ([]Command, error) {
+    return []Command{Command{"Hello setup aliases", ""}}, nil
+}
+
+func envs(o Opts) ([]Command, error) {
+    return []Command{Command{"Hello setup envs", ""}}, nil
+}

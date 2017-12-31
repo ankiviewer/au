@@ -1,11 +1,11 @@
 package main
 
-var BuildCmd = Cmd{
+var BuildCmd = AvCmd{
     "Build Cmd",
-    []Arg{},
+    []AvArg{},
     build,
 }
 
-func build(_ string, _ string) ([]string, error) {
-    return []string{"BUILD"}, nil
+func build(o Opts) ([]Command, error) {
+    return []Command{}, nil
 }

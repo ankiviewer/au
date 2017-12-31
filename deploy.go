@@ -1,11 +1,11 @@
 package main
 
-var DeployCmd = Cmd{
+var DeployCmd = AvCmd{
     "Deploy Cmd",
-    []Arg{},
+    []AvArg{},
     deploy,
 }
 
-func deploy(_ string, _ string) ([]string, error) {
-    return []string{"DEPLOY"}, nil
+func deploy(o Opts) ([]Command, error) {
+    return []Command{}, nil
 }

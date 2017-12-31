@@ -1,11 +1,11 @@
 package main
 
-var TestCmd = Cmd{
+var TestCmd = AvCmd{
     "Test Cmd",
-    []Arg{},
+    []AvArg{},
     test,
 }
 
-func test(fp string, _ string) ([]string, error) {
-    return []string{"TEST"}, nil
+func test(o Opts) ([]Command, error) {
+    return []Command{}, nil
 }

@@ -109,7 +109,7 @@ func aliases(o Opts) ([]Command, error) {
         root = "$AV_ANKIVIEWER_PATH"
     }
     for _, a := range Aliases {
-        log := a.alias + "='cd " + root + a.dest + "'"
+        log := "alias " + a.alias + "='cd " + root + a.dest + "'"
         out = append(out, Command{log, ""})
     }
     return out, nil
@@ -121,10 +121,9 @@ func envs(o Opts) ([]Command, error) {
             sqlitePath not found, will have to be manually set
         `)
     }
-    str := `
-    Append these to your .rc file:
-    AV_ANKI_SQLITE_PATH=%s
-    AV_ANKIVIEWER_PATH=%s
+    str := `Append these to your .rc file:
+export AV_ANKI_SQLITE_PATH=%s
+export AV_ANKIVIEWER_PATH=%s
     `
     out := []Command{
         Command{

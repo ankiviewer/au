@@ -31,8 +31,18 @@ For useage run: `au` or `au help` after installation
 
 # Tests
 
+Files with: `//+build !test` at the top will not be covered
+
 Run the coverage locally and view the output with:
 
 ```bash
-go test -coverprofile=c.out && go tool cover -html=c.out
+go test -coverprofile=c.out -tags=test && go tool cover -html=c.out
 ```
+
+Just run the coverage output in the terminal with:
+
+```bash
+go test -cover -tags=test
+```
+
+add the `-v` flag for a verbose output

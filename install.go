@@ -1,11 +1,11 @@
 package main
 
-var InstallCmd = Cmd{
+var InstallCmd = AvCmd{
     "Install Cmd",
-    []Arg{},
+    []AvArg{},
     install,
 }
 
-func install(_ string, _ string) ([]string, error) {
-    return []string{"INSTALL"}, nil
+func install(o Opts) ([]Command, error) {
+    return []Command{}, nil
 }

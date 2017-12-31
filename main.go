@@ -1,43 +1,56 @@
+//+build !test
+
 package main
 
 import (
     "os"
+    "os/exec"
     "path/filepath"
     "fmt"
+    "regexp"
+    "strings"
     "github.com/ankiviewer/av/messages"
 )
 
-type Arg struct {
-    name string
-    desc string
-}
-
-type Cmd struct {
-    desc string
-    args []Arg
-    f func(string, string) ([]string, error)
-}
-
-var AvCmds = map[string]Cmd{
-    "setup": SetupCmd,
-    "open": OpenCmd,
-    "install": InstallCmd,
-    "build": BuildCmd,
-    "test": TestCmd,
-    "cover": CoverCmd,
-    "start": StartCmd,
-    "versions": VersionsCmd,
-    "deploy": DeployCmd,
-}
-
-func handleLog(ss []string, err error) {
+func handleCmd(cmds []Command, err error) {
     if err != nil {
         fmt.Println(err)
     } else {
-        for _, s := range ss {
-            fmt.Println(s)
+        for _, c := range cmds {
+            if c.cmd != "" {
+                _, cerr := exec.Command("sh", "-c", c.cmd).Output()
+                if cerr != nil {
+                    fmt.Printf("CMD ERR: %s", cerr)
+                    break
+                }
+            }
+            if c.log != "" {
+                fmt.Println(c.log)
+            }
         }
     }
+}
+
+func getAliases() map[string]string{
+    aliases := make(map[string]string)
+    for _, a := range []string{"avweb", "avmain", "avassets", "avnodeapp"} {
+        aout, aerr := exec.Command("alias", a).Output()
+        if aerr != nil {
+            aliases[a] = ""
+        } else {
+            aliases[a] = string(aout)
+        }
+    }
+    return aliases
+}
+
+func getSqlitePath() string {
+    c := "find \"$(find $HOME -type d | grep Anki2 | head -1)\" -type f | grep collection\\.anki2$"
+    out, err := exec.Command("sh", "-c", c).Output()
+    if err != nil {
+        return ""
+    }
+    return strings.Trim(string(out), "\n ")
 }
 
 func main() {
@@ -47,24 +60,29 @@ func main() {
     }
 
     fp, _ := filepath.Abs("./")
+    root := regexp.MustCompile(`.*ankiviewer`).FindString(fp)
+    dirsInRoot := []string{}
+    if root != "" {
+        lsInRoot, _ := exec.Command("ls", root).Output()
+        for _, dir := range strings.Split(string(lsInRoot), "\n") {
+            dirsInRoot = append(dirsInRoot, dir)
+        }
+    }
     command := os.Args[1]
     arguments := os.Args[2:]
-
-    if command == "help" {
-      handleLog(Help(fp, ""))
-      return
+    aliases := getAliases()
+    sqlitePath := os.Getenv("AV_ANKI_SQLITE_PATH")
+    ankiviewerPath := os.Getenv("AV_ANKIVIEWER_PATH")
+    if sqlitePath == "" {
+        sqlitePath = getSqlitePath()
     }
 
-    if c, ok := AvCmds[command]; ok {
-        switch {
-        case len(arguments) == 0:
-            handleLog(c.f(fp, ""))
-        case len(arguments) == 1:
-            handleLog(c.f(fp, arguments[0]))
-        default:
-            // Consider allowing more than 1 argument in the future
-            panic("Too many arguments")
-        }
+    o := Opts{fp, arguments, aliases, root, dirsInRoot, sqlitePath, ankiviewerPath}
+
+    if command == "help" {
+        handleCmd(Help(o))
+    } else if c, ok := AvCmds[command]; ok {
+        handleCmd(c.f(o))
     } else {
         fmt.Println("Command not found")
     }

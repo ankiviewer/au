@@ -5,6 +5,10 @@ import (
 		"fmt"
 )
 
+func Spaces(n int) string {
+  return strings.Repeat(" ", n)
+}
+
 func StringInSlice(a string, list []string) bool {
     for _, b := range list {
         if b == a {
@@ -31,12 +35,4 @@ func MapKeys(m interface{}) ([]string, error) {
     default:
         return nil, fmt.Errorf("unknown map type: %T", m)
     }
-}
-
-func InAnkiRoot(fp string) bool {
-  return strings.HasSuffix(fp, "anki_viewer_umbrella")
-}
-
-func InAnkiApp(fp string) bool {
-  return strings.Contains(fp, "anki_viewer_umbrella")
 }

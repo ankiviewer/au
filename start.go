@@ -1,11 +1,11 @@
 package main
 
-var StartCmd = Cmd{
+var StartCmd = AvCmd{
     "Start Cmd",
-    []Arg{},
+    []AvArg{},
     start,
 }
 
-func start(_ string, _ string) ([]string, error) {
-    return []string{"START"}, nil
+func start(o Opts) ([]Command, error) {
+    return []Command{}, nil
 }

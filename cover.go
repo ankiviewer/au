@@ -1,11 +1,11 @@
 package main
 
-var CoverCmd = Cmd{
+var CoverCmd = AvCmd{
     "Cover Cmd",
-    []Arg{},
+    []AvArg{},
     cover,
 }
 
-func cover(_ string, _ string) ([]string, error) {
-    return []string{"COVER"}, nil
+func cover(o Opts) ([]Command, error) {
+    return []Command{}, nil
 }

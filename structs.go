@@ -36,7 +36,6 @@ var AvCmds = map[string]AvCmd{
     // "cover": CoverCmd,
     // "start": StartCmd,
     // "versions": VersionsCmd,
-    // "deploy": DeployCmd,
 }
 
 var Aliases = []struct {

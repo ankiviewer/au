@@ -16,6 +16,12 @@ Examples:
   // TODO: add these for alias output
 // find "$(find $HOME -type d | grep Anki2 | head -1)" -type f | grep collection.anki2 for anki sqlite db path
 // pwd for proj path
+var FileStructure = `
+├── ankiviewer
+    ├── av_umbrella (github.com/ankiviewer/av_umbrella)
+    ├── nodeapp (github.com/ankiviewer/nodeapp)
+    └── assets (github.com/ankiviewer/assets)
+`
 var NoInput = `
        __ _ _   _
       / _  | | | |
@@ -24,13 +30,7 @@ var NoInput = `
 
 # Quick Start:
 
-You will need to set up this file structure:
-
-├── ankiviewer
-    ├── av_umbrella (github.com/ankiviewer/av_umbrella)
-    ├── nodeapp (github.com/ankiviewer/nodeapp)
-    └── assets (github.com/ankiviewer/assets)
-
+You will need to set up this file structure: ` + FileStructure + `
 This can be set up simply with:
 
 av setup filestructure 

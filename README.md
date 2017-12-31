@@ -28,3 +28,11 @@ go build
 Place this `au` executable somewhere in your `$PATH`
 
 For useage run: `au` or `au help` after installation
+
+# Tests
+
+Run the coverage locally and view the output with:
+
+```bash
+go test -coverprofile=c.out && go tool cover -html=c.out
+```

@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/shouston3/au.svg?branch=master)](https://travis-ci.org/shouston3/au)
 [![codecov](https://codecov.io/gh/shouston3/au/branch/master/graph/badge.svg)](https://codecov.io/gh/shouston3/au)
 
+# Abandoning this
+
 # AV
 
 av is a companion program for the `av_umbrella` project
